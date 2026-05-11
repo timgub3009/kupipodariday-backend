@@ -1,44 +1,67 @@
 /**
  * Сущность описывает зарегистрированного пользователя системы.
  * Хранит всю информацию о человеке, необходимую для авторизации,
- * отображения профиля и связей с его подарками, оферами и подборками.
+ * отображения профиля и связей с его подарками, предложениями скинуть на подарки и подборками.
  */
 
+import { Offer } from 'src/offers/offers.entity';
 import { DEFAULT_USER_AVATAR_URL } from 'src/shared/constants';
 import { Ru } from 'src/shared/locales';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Wish } from 'src/wishes/wishes.entity';
+import { Wishlist } from 'src/wishlists/wishlists.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
+/** Пользователь. */
 @Entity()
 export class User {
+  /** Уникальный идентификатор. */
   @PrimaryGeneratedColumn()
-  /** Уникальный идентификатор пользователя. */
   id: number;
 
-  @Column({ length: 64, unique: true })
   /** Имя пользователя, отображающееся в профиле. */
+  @Column({ length: 64, unique: true })
   username: string;
 
-  @Column({ length: 200, default: Ru.PROFILE_DESCRIPTION_DEFAULT_TEXT })
   /** Описание профиля пользователя. */
+  @Column({ length: 200, default: Ru.PROFILE_DESCRIPTION_DEFAULT_TEXT })
   about: string;
 
-  @Column({ default: DEFAULT_USER_AVATAR_URL })
   /** Аватар пользователя. */
+  @Column({ default: DEFAULT_USER_AVATAR_URL })
   avatar: string;
 
-  @Column({ unique: true })
   /** Почта пользователя. */
+  @Column({ unique: true })
   email: string;
 
-  @Column({ select: false })
   /** Пароль пользователя. */
+  @Column({ select: false })
   password: string;
 
-  @CreateDateColumn()
   /** Дата регистрации (создания) профиля пользователя. */
+  @CreateDateColumn()
   createdAt: Date;
 
-  @UpdateDateColumn()
   /** Дата последнего обновления информации профиля пользователя. */
+  @UpdateDateColumn()
   updatedAt: Date;
+
+  /** Список желаемых подарков. Один пользователь может добавить много подарков. */
+  @OneToMany(() => Wish, (wish) => wish.owner)
+  wishes: Wish[];
+
+  /** Список вишлистов. Один пользователь может добавить много вишлистов. */
+  @OneToMany(() => Wishlist, (wishlist) => wishlist.owner)
+  wishlists: Wishlist[];
+
+  /** Список подарков, на которые скидывается пользователь. Один пользователь может скидываться на несколько подарков. */
+  @OneToMany(() => Offer, (offer) => offer.user)
+  offers: Offer[];
 }
