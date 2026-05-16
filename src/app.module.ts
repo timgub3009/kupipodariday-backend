@@ -7,6 +7,7 @@ import { WishesController } from './wishes/wishes.controller';
 import { WishesModule } from './wishes/wishes.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
 import { OffersModule } from './offers/offers.module';
+import { HashModule } from './hash/hash.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { OffersModule } from './offers/offers.module';
     WishlistsModule,
     OffersModule,
     OffersModule,
+    HashModule,
   ],
   controllers: [AppController, WishesController],
   providers: [AppService],
