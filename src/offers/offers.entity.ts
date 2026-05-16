@@ -20,7 +20,7 @@ export class Offer {
   @PrimaryGeneratedColumn()
   id: number;
 
-  /** Сумма заявки, которая нужна, округленная до двух знаков после запятой. */
+  /** Сумма заявки, вносимая пользователем, округленная до двух знаков после запятой. */
   @Column({ type: 'decimal', scale: 2 })
   amount: number;
 
