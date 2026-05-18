@@ -5,6 +5,7 @@ import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm';
 import { throwNotFoundException } from 'src/shared/helpers';
 import { HashService } from 'src/hash/hash.service';
 import { Ru } from 'src/shared';
+import { UserProfileResponseDto } from './dto/user-profile-response.dto';
 
 @Injectable()
 export class UsersService {
@@ -106,5 +107,9 @@ export class UsersService {
       ],
     });
     return user;
+  }
+
+  async searchUsers(query: string): Promise<UserProfileResponseDto[]> {
+    if (!query) return [];
   }
 }

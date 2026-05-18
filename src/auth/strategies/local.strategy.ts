@@ -1,9 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
-import { AuthService } from '../auth.service';
+import { type AuthService } from '../auth.service';
 import { Ru } from 'src/shared';
-import { User } from 'src/users/users.entity';
+import { type UserProfileResponseDto } from 'src/users/dto/user-profile-response.dto';
+import { type SigninUserDto } from '../dto/signin-user.dto';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -11,11 +12,11 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  async validate(
-    username: string,
-    password: string,
-  ): Promise<Omit<User, 'password'>> {
-    const user = await this.authService.validateUser(username, password);
+  async validate({
+    username,
+    password,
+  }: SigninUserDto): Promise<UserProfileResponseDto> {
+    const user = await this.authService.validateUser({ username, password });
 
     if (!user) {
       throw new UnauthorizedException(Ru.AUTH_FAILED);
